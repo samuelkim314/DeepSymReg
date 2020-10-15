@@ -16,16 +16,19 @@ including arithmetic on MNIST digits and extracting the equations of kinematic a
 ## Requirements
 
 * Python 3.5
-* TensorFlow 1.13 (SymPy pretty_print does not work 1.14)
+* TensorFlow 1.15
 * NumPy 1.16 (does not work on 1.17)
 * Scipy 1.3
-* Matplotlib
+* Sympy 1.6
+* Matplotlib (optional)
 
 All dependencies are in [requirements.txt](requirements.txt). 
 To install required packages, you can simply run the following code in your shell.
 ```
 pip install -r requirements.txt
 ```
+
+Note that the pretty_print functions in SymPy 1.4 only works with TensorFlow <=1.13.
 
 ## Training
 

@@ -88,7 +88,7 @@ class Benchmark(benchmark.Benchmark):
                             initial_weights=[
                                                  tf.truncated_normal([x_dim, width + n_double], stddev=init_sd_first),
                                                  tf.truncated_normal([width, width + n_double], stddev=init_sd_middle),
-                                   tf.truncated_normal([width, width + n_double], stddev=init_sd_middle),
+                                                 tf.truncated_normal([width, width + n_double], stddev=init_sd_middle),
                                                  tf.truncated_normal([width, 1], stddev=init_sd_last)
                                              ], )
         y_hat = sym(x_placeholder)

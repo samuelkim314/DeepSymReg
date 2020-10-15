@@ -114,7 +114,7 @@ class SymbolicDigit:
         self.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
         self.error_avg = tf.reduce_mean(tf.abs(self.y_hat - self.y_))
 
-    def set_training(self, reg=0):
+    def set_training(self, reg=tf.constant(0.0)):
         """Set up the remainder of the Tensorflow graph for training. Call set_reg before this. This must be called
         before training the network."""
         self.loss = tf.losses.mean_squared_error(self.y_, self.y_hat)
