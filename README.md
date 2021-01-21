@@ -3,6 +3,8 @@
 This repository is the official implementation of 
 [Integration of Neural Network-Based Symbolic Regression in Deep Learning for Scientific Discovery](https://arxiv.org/abs/1912.04825)
 
+Please cite the above paper if you use this code for your work.
+
 Symbolic regression, in which a model discovers an analytical equation describing a dataset as opposed to finding 
 the weights of pre-defined features, is normally implemented using genetic programming.
 Here, we demonstrate symbolic regression using neural networks,
@@ -29,6 +31,60 @@ pip install -r requirements.txt
 ```
 
 Note that the pretty_print functions in SymPy 1.4 only works with TensorFlow <=1.13.
+
+## Package Description
+
+The core code is all contained inside the utils/ directory
+
+* `functions.py` contains different primitives, or activation functions. The primitives are built as classes so that different parts of the code (TensorFlow versus NumPy versus SymPy) have a unified way of addressing the functions.
+
+* `pretty_print.py` contains functions to print out the equations in the end in a human-readable format from a trained EQL network.
+
+* `symbolic_network.py` contains the core code of the EQL network, including methods for L0 regularization.
+
+## Quick Intro
+
+This demonstrates a minimal example for how to use this library for training the EQL network.
+
+```python
+import numpy as np
+import tensorflow as tf
+from utils import functions, pretty_print
+from utils.symbolic_network import SymbolicNetL0
+from utils.regularization import l12_smooth
+
+funcs = functions.default_func
+
+# Set up TensorFlow graph for the EQL network
+x_placeholder = tf.placeholder(shape=(None, x_dim), dtype=tf.float32)
+sym = SymbolicNetL0(symbolic_depth=2, funcs=funcs)
+y_hat = sym(x_placeholder)
+
+# Set up loss function with L0.5 loss
+mse = tf.losses.mean_squared_error(labels=y, predictions=y_hat)
+loss = mse + 1e-2 * l12_smooth(sym.get_weights())
+
+# Set up TensorFlow graph for training
+opt = tf.train.RMSPropOptimizer()
+train = opt.minimize(loss)
+
+# Random data for a simple function
+x = np.random.rand(100, 1)
+y = x ** 2
+
+# Training
+with tf.Session as sess:
+  sess.run(tf.global_variables_initializer())
+  for i in range(1000):
+    sess.run(train, feed_dict={x_placeholder: x})
+
+  # Print out the expression
+  weights = sess.run(sym.get_weights())
+  expr = pretty_print.network(weights, funcs, ['x'])
+  print(expr)
+```
+
+For a more complete example with training stages or L0 regularization, see below.
 
 ## Training
 
@@ -65,7 +121,6 @@ Both implement the RNN using the built-in TensorFlow libraries.
 
 `sho_relu.py`: Same as `sho_sr.py`
 but using a conventional neural network with ReLU activation functions instead of the EQL network.
-
 
 ### Authors
 Samuel Kim, Peter Lu, Srijon Mukherjee, Michael Gilbert, Li Jing, Vladimir Ceperic, Marin Soljacic
