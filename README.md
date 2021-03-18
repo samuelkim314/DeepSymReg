@@ -15,6 +15,8 @@ interpretable and generalizable results. This repository implements symbolic reg
 demonstrates its integration with deep learning for multiple tasks,
 including arithmetic on MNIST digits and extracting the equations of kinematic and differential equation datasets.
 
+The PyTorch implementation can be found at [this repository](https://github.com/samuelkim314/DeepSymRegTorch)
+
 ## Requirements
 
 * Python 3.5
