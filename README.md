@@ -55,35 +55,37 @@ from utils import functions, pretty_print
 from utils.symbolic_network import SymbolicNetL0
 from utils.regularization import l12_smooth
 
+
 funcs = functions.default_func
+x_dim = 1
+# Random data for a simple function
+x = np.random.rand(100, x_dim) * 2 - 1
+y = x ** 2
 
 # Set up TensorFlow graph for the EQL network
 x_placeholder = tf.placeholder(shape=(None, x_dim), dtype=tf.float32)
-sym = SymbolicNetL0(symbolic_depth=2, funcs=funcs)
+sym = SymbolicNetL0(symbolic_depth=2, funcs=funcs, init_stddev=0.5)
 y_hat = sym(x_placeholder)
 
 # Set up loss function with L0.5 loss
 mse = tf.losses.mean_squared_error(labels=y, predictions=y_hat)
-loss = mse + 1e-2 * l12_smooth(sym.get_weights())
+loss = mse + 1e-2 * sym.get_loss()
 
 # Set up TensorFlow graph for training
-opt = tf.train.RMSPropOptimizer()
+opt = tf.train.RMSPropOptimizer(learning_rate=1e-2)
 train = opt.minimize(loss)
 
-# Random data for a simple function
-x = np.random.rand(100, 1)
-y = x ** 2
-
 # Training
-with tf.Session as sess:
-  sess.run(tf.global_variables_initializer())
-  for i in range(1000):
-    sess.run(train, feed_dict={x_placeholder: x})
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    for i in range(2000):
+        sess.run(train, feed_dict={x_placeholder: x})
 
-  # Print out the expression
-  weights = sess.run(sym.get_weights())
-  expr = pretty_print.network(weights, funcs, ['x'])
-  print(expr)
+    # Print out the expression
+    weights = sess.run(sym.get_weights())
+    expr = pretty_print.network(weights, funcs, ['x'])
+    print(expr)
+
 ```
 
 For a more complete example with training stages or L0 regularization, see below.
