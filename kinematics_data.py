@@ -18,7 +18,7 @@ parser.add_argument('--output', metavar='f', default='dataset/kinematic')
 args = parser.parse_args()
 
 NT = args.T     # Number of time steps
-NG = args.G     # Number of data points (number of g values to sample)
+NG = args.N    # Number of data points (number of g values to sample)
 
 # Min/max limits on parameters
 D0_MIN = -1
