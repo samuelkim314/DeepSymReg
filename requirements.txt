@@ -1,6 +1,6 @@
 h5py==2.9.0
 matplotlib==3.0.3
-numpy==1.16
+numpy==1.22.0
 scipy
 sympy==1.6
 tensorflow-gpu==1.15
