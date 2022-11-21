@@ -3,4 +3,4 @@ matplotlib==3.0.3
 numpy==1.16
 scipy
 sympy==1.6
-tensorflow-gpu==1.15
+tensorflow-gpu==2.9.3
